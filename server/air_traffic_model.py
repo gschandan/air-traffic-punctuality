@@ -3,7 +3,7 @@ import air_traffic_database as db
 
 class AirTraffic(db.base):
     __tablename__ = "air_traffic_all"
-    id = sql.Column(sql.INTEGER, primary_key = True, index = True)
+    index = sql.Column(sql.INTEGER, primary_key = True, index = True)
     month = sql.Column(sql.TEXT, index=True)
     airport = sql.Column(sql.TEXT, index=True)
     total_flights = sql.Column(sql.INTEGER)

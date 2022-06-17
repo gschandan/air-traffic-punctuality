@@ -22,11 +22,6 @@ class AirTrafficBase(BaseModel):
 class AirTrafficCreate(AirTrafficBase):
     pass
 
-class AirTrafficFetch(AirTrafficBase):
-    id : int
-    class Config:
-        orm_mode = True
-
 class AirTraffic(AirTrafficBase):
     id: int
     class Config:
