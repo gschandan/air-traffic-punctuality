@@ -4,7 +4,7 @@ import os
 
 def populate_air_traffic_data(table_names):
 
-    cwd = os.getcwd()
+    cwd = os.getcwd() + "\\rawdata\\"
 
     with sqlite3.connect("air-traffic.db") as connection:
         for _, table_name in enumerate(table_names):

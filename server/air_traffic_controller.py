@@ -20,6 +20,6 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-@app.get("/api/all", response_model=air_traffic_schema.AirTrafficBase)
+@app.get("/api/all", response_model=air_traffic_schema.AirTrafficFetch)
 async def get_all(db: _orm.Session = Depends(air_traffic_repository.get_database)):
    return await air_traffic_repository.get_all_air_traffic_data(db)

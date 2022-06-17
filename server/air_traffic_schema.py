@@ -16,8 +16,16 @@ class AirTrafficBase(BaseModel):
     more_than_threehundred_and_sixty_minutes_late: float
     average_delay_minutes: float
 
+    class Config:
+        orm_mode = True
+
 class AirTrafficCreate(AirTrafficBase):
     pass
+
+class AirTrafficFetch(AirTrafficBase):
+    id : int
+    class Config:
+        orm_mode = True
 
 class AirTraffic(AirTrafficBase):
     id: int
