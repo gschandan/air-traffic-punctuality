@@ -1,4 +1,4 @@
-month,airport,total_flights,cancelled_flights,more_than_15_minutes_early,15_to_1_minute_early,0_to_15_minutes_late,16_to_30_minutes_late,31_to_60_minutes_late,61_to_120_minutes_late,121_to_180_minutes_late,181_to_360_minutes_late,more_than_360_minutes_late,average_delay_minutes
+month,airport,total_flights,cancelled_flights,more_than_fifteen_minutes_early,fifteen_to_one_minute_early,zero_to_fifteen_minutes_late,sixteen_to_thirty_minutes_late,thirtyone_to_sixty_minutes_late,sixtyone_to_onehundred_and_twenty_minutes_late,onehundred_and_twentyone_to_onehundred_and_eighty_minutes_late,onehundred_and_eightyone_to_threehundred_and_sixty_minutes_late,more_than_threehundred_and_sixty_minutes_late,average_delay_minutes
 JAN,ABERDEEN,1380,55,8.501742,45.505226,26.829268,7.735192,4.111498,2.369338,1.045296,0.069686,0,8.85
 JAN,BELFAST CITY (GEORGE BEST),1032,22,26.565465,54.743833,11.954459,2.371917,1.518027,0.474383,0.189753,0.094877,0,2.75
 JAN,BELFAST INTERNATIONAL,1956,0,11.707566,64.723926,16.206544,3.271984,2.760736,1.07362,0.204499,0.051125,0,4.06
