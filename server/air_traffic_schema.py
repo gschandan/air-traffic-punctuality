@@ -23,7 +23,7 @@ class AirTrafficCreate(AirTrafficBase):
     pass
 
 class AirTraffic(AirTrafficBase):
-    id: int
+    index: int
     
     class Config:
         orm_mode = True

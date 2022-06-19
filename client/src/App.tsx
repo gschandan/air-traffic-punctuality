@@ -1,13 +1,5 @@
-import {
-  ChakraProvider,
-  Box,
-  VStack,
-  Grid,
-  theme,
-  HStack,
-} from "@chakra-ui/react";
-import { ColorModeSwitcher } from "./ColorModeSwitcher";
-import Graph from "./components/Graphs/BarGraph";
+import { ChakraProvider, Grid, theme, HStack } from "@chakra-ui/react";
+import Graph from "./components/Graphs/Graph";
 import NavBar from "./components/NavBar/NavBar";
 
 export const App = () => (

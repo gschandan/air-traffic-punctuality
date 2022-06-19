@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { FC } from "react";
 import "@fontsource/raleway";
-import NavHover from "./NavHover";
+import NavDescription from "./NavDescription";
 
 export interface NavItemProps {
   navBarState: boolean;
@@ -73,9 +73,9 @@ const NavItem: FC<NavItemProps> = (props): JSX.Element => {
               ml={3}
               border="none"
               width={125}
-              height={75}
+              height={150}
             >
-              <NavHover
+              <NavDescription
                 navBarState={props.navBarState}
                 text={props.text}
                 icon={props.icon}

@@ -20,14 +20,14 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
-@app.get("/api/all", response_model=list[air_traffic_schema.AirTrafficBase])
+@app.get("/api/all", response_model=list[air_traffic_schema.AirTraffic])
 async def get_all(db: _orm.Session = Depends(air_traffic_repository.get_database)):
     return await air_traffic_repository.get_air_traffic_all_data(db)
 
-@app.get("/api/scheduled", response_model=list[air_traffic_schema.AirTrafficBase])
+@app.get("/api/scheduled", response_model=list[air_traffic_schema.AirTraffic])
 async def get_all(db: _orm.Session = Depends(air_traffic_repository.get_database)):
     return await air_traffic_repository.get_air_traffic_scheduled_data(db)
 
-@app.get("/api/chartered", response_model=list[air_traffic_schema.AirTrafficBase])
+@app.get("/api/chartered", response_model=list[air_traffic_schema.AirTraffic])
 async def get_all(db: _orm.Session = Depends(air_traffic_repository.get_database)):
     return await air_traffic_repository.get_all_air_traffic_chartered_data(db)
