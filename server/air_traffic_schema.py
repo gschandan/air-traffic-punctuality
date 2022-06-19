@@ -24,5 +24,6 @@ class AirTrafficCreate(AirTrafficBase):
 
 class AirTraffic(AirTrafficBase):
     id: int
+    
     class Config:
         orm_mode = True
