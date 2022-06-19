@@ -1,8 +1,10 @@
 import { Divider, Flex, IconButton } from "@chakra-ui/react";
 import Logo from "../Assets/Logo";
 import LogoTitle from "../Assets/LogoTitle";
-import { Menu } from "react-feather";
+import { Menu, Home, Edit, Upload, Settings, HelpCircle } from "react-feather";
 import { useState } from "react";
+import NavItem from "./NavItem";
+import { ColorModeSwitcher } from "../../ColorModeSwitcher";
 
 const NavBar = () => {
   const [navBarState, changeNavBarState] = useState(true);
@@ -26,10 +28,11 @@ const NavBar = () => {
         alignItems="center"
         mt={5}
         justifyContent="space-evenly"
+        height="70vh"
       >
         <IconButton
           background="none"
-          aria-label={""}
+          aria-label="Options"
           mt={5}
           mb={5}
           _hover={{ background: "none" }}
@@ -37,8 +40,45 @@ const NavBar = () => {
           onClick={() => {
             changeNavBarState(!navBarState);
           }}
+          color={"blue.00"}
         />
         <LogoTitle display={navBarState ? "flex" : "none"} />
+        <Divider display={navBarState ? "flex" : "none"} mt={5} />
+        <NavItem
+          navBarState={navBarState}
+          text="Dashboard"
+          icon={Home}
+          description="Homepage with summary graphs"
+        />
+        <NavItem
+          navBarState={navBarState}
+          text="Edit"
+          icon={Edit}
+          description="Edit the data for the graphs here"
+        />
+        <NavItem
+          navBarState={navBarState}
+          text="Upload"
+          icon={Upload}
+          description="Upload new data"
+        />
+        <NavItem
+          navBarState={navBarState}
+          text="Settings"
+          icon={Settings}
+          description="Edit your dashboard confiuguration"
+        />
+        <NavItem
+          navBarState={navBarState}
+          text="Help"
+          icon={HelpCircle}
+          description="View our documentation"
+        />
+        <ColorModeSwitcher
+          mt={10}
+          justifySelf="flex-end"
+          justifyContent="end"
+        />
       </Flex>
       <Flex
         flexDirection="column"
@@ -47,7 +87,6 @@ const NavBar = () => {
         mb={3}
         mt={5}
       >
-        {" "}
         <Divider display={navBarState ? "flex" : "none"} />
         <Flex flexDir="column">
           <Logo />
