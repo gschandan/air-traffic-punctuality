@@ -42,7 +42,10 @@ const NavBar = () => {
           }}
           color={"blue.00"}
         />
+        <ColorModeSwitcher mt={1} />
+
         <LogoTitle display={navBarState ? "flex" : "none"} />
+
         <Divider display={navBarState ? "flex" : "none"} mt={5} />
         <NavItem
           navBarState={navBarState}
@@ -73,11 +76,6 @@ const NavBar = () => {
           text="Help"
           icon={HelpCircle}
           description="View our documentation"
-        />
-        <ColorModeSwitcher
-          mt={10}
-          justifySelf="flex-end"
-          justifyContent="end"
         />
       </Flex>
       <Flex

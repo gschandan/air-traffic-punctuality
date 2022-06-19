@@ -1,6 +1,6 @@
 import { FC } from "react";
-import logoDark from "../../assets/logo_dark.png";
-import logoLight from "../../assets/logo_light.png";
+import logoDark from "../../assets/logo_dark_2.png";
+import logoLight from "../../assets/logo_light_2.png";
 import { useColorModeValue, Img } from "@chakra-ui/react";
 
 interface LogoProps {
@@ -16,7 +16,7 @@ const Logo: FC<LogoProps> = (props): JSX.Element => {
       alt="Logo"
       height={props.height}
       width={props.width}
-      mt={0}
+      m={4}
     />
   );
 };
