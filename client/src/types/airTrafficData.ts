@@ -1,7 +1,3 @@
-export interface AirTrafficData {
-  data: AirTraffic[];
-}
-
 export interface AirTraffic {
   index?: number;
   month: string;

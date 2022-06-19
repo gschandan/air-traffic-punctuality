@@ -4,7 +4,7 @@ import BarGraphControls from "./BarGraphControls";
 
 const Graph = () => {
   return (
-    <VStack>
+    <VStack justify="center" ml={5}>
       <BarGraph></BarGraph>
       <BarGraphControls></BarGraphControls>
     </VStack>
