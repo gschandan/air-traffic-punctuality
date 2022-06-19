@@ -1,0 +1,2 @@
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QInteractive dashboard for visualising punctuality data for flights leaving UK airports\\E$"}
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QUK Flight Punctuality Visualiser (PoC)\\E$"}
