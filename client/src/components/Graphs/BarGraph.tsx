@@ -11,7 +11,7 @@ const BarGraph = () => {
   const themeColor = useColorModeValue("light", "dark");
 
   useEffect(() => {
-    fetch("http://localhost:5001/api/all")
+    fetch("http://localhost:5001/api/combined/all")
       .then((response) => response.json())
       .then((response) => setData(response))
       .then(() => {

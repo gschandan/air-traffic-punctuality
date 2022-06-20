@@ -1,5 +1,13 @@
-import database
-from server.models.air_traffic_model import AirTrafficAll
+import sqlalchemy.orm as orm
+from models.air_traffic_model import AirTrafficAll
+import data.database as db
 
-async def get_all():
-    return database.query(AirTrafficAll).all()
+def get_database():
+    database = db.local_session()
+    try:
+        yield database
+    finally:
+        database.close()
+
+async def get_all(db: orm.Session):
+    return db.query(AirTrafficAll).all()
