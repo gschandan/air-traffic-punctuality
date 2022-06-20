@@ -1,5 +1,5 @@
 import sqlalchemy as sql
-import air_traffic_database as db
+import database as db
 
 class AirTraffic():
     index = sql.Column(sql.INTEGER, primary_key = True, index = True)
