@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Text, useColorModeValue } from "@chakra-ui/react";
-import { AirTraffic } from "../../types/airTrafficData";
+import { AirTraffic } from "../../../types/airTrafficData";
 import * as d3 from "d3";
 
 const BarGraph = () => {
