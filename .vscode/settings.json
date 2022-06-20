@@ -1,3 +1,0 @@
-{
-  "python.analysis.extraPaths": ["./server/data/schemas", "./server/data"]
-}
