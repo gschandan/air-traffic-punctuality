@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-import air_traffic_schema
-import air_traffic_repository
+import server.schemas.air_traffic_schema as air_traffic_schema
+import server.repositories.air_traffic_repository as air_traffic_repository
 import sqlalchemy.orm as _orm
 
 app = FastAPI()

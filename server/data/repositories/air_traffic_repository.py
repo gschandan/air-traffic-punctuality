@@ -1,6 +1,6 @@
 import air_traffic_database as db
 import sqlalchemy.orm as orm
-from air_traffic_model import AirTrafficAll, AirTrafficChartered, AirTrafficScheduled
+from server.models.air_traffic_model import AirTrafficAll, AirTrafficChartered, AirTrafficScheduled
 
 def get_database():
     database = db.local_session()
