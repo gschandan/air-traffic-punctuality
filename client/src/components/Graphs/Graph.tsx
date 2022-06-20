@@ -1,13 +1,17 @@
-import { VStack } from "@chakra-ui/react";
-import BarGraph from "./BarGraph";
-import BarGraphControls from "./BarGraphControls";
+import { Flex, VStack } from "@chakra-ui/react";
+import BarGraph from "./BarGraph/BarGraph";
+import BarGraphControls from "./BarGraph/BarGraphControls";
+import Description from "./Description";
 
 const Graph = () => {
   return (
-    <VStack justify="center" ml={5}>
-      <BarGraph></BarGraph>
-      <BarGraphControls></BarGraphControls>
-    </VStack>
+    <Flex flexDir="row">
+      <VStack justify="center" ml={5}>
+        <BarGraph></BarGraph>
+        <BarGraphControls></BarGraphControls>
+      </VStack>
+      <Description />
+    </Flex>
   );
 };
 
