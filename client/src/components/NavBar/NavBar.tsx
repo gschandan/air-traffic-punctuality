@@ -49,7 +49,7 @@ const NavBar = () => {
         <Divider display={navBarState ? "flex" : "none"} mt={5} />
         <NavItem
           navBarState={navBarState}
-          text="Dashboard"
+          text="Home"
           icon={Home}
           description="Homepage with summary graphs"
         />

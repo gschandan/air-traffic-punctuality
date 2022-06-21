@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Text, useColorModeValue } from "@chakra-ui/react";
+import { Box, Text, useColorModeValue } from "@chakra-ui/react";
 import { AirTraffic } from "../../../types/airTrafficData";
 import * as d3 from "d3";
 
@@ -16,7 +16,7 @@ const BarGraph = () => {
       .then((response) => setData(response))
       .then(() => {
         if (data !== undefined) {
-          buildBarGraph(data, 600, 600);
+          buildBarGraph(data, 500, 500);
           setError(false);
         } else {
           throw new Error("Unable to load the data");
@@ -67,7 +67,7 @@ const BarGraph = () => {
       .attr("transform", `translate(0, ${calcHeight})`)
       .call(d3.axisBottom(xAxis))
       .selectAll("text")
-      .attr("transform", "translate(-10,5)rotate(-45)")
+      .attr("transform", "translate(10,5)")
       .style("text-anchor", "end");
 
     const yAxis = d3
@@ -148,15 +148,15 @@ const BarGraph = () => {
   }
 
   return (
-    <>
+    <Box width="60vw" height="60vh" pl="10vw">
       {error && (
         <Text fontSize="3xl">
           Unfortunately an error occurred when trying to fetch the data. Further
           information: {errorMessage}
         </Text>
       )}
-      <svg ref={graph} width="70vw" height="60vh"></svg>
-    </>
+      <svg ref={graph} width="60vw" height="60vh"></svg>
+    </Box>
   );
 };
 
