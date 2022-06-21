@@ -8,19 +8,19 @@ import {
   Select,
   Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext } from "react";
+import { GraphControlsContext } from "./Graph";
+import { Actions } from "./GraphReducer";
 
 const BarGraphControls = () => {
-  const [xAxis, setXAxis] = useState("month");
-  const [yAxis, setYAxis] = useState("average-delay");
-  const [graphType, setGraphType] = useState("bar");
+  const controlContext = useContext(GraphControlsContext);
 
   return (
     <Grid
       height="15vh"
       width="60vw"
       templateRows="repeat(3, 1fr)"
-      templateColumns="repeat(5, 1fr)"
+      templateColumns="repeat(6, 1fr)"
       gap={4}
       boxShadow="0 5px 10px 0 rgba(0,0,0,0.08)"
       borderRadius="35px"
@@ -31,12 +31,25 @@ const BarGraphControls = () => {
         alignSelf="flex-end"
         justifySelf="center"
       >
-        <Text>Select Chart Type:</Text>
+        <Text>Select Dataset:</Text>
       </GridItem>
       <GridItem colStart={1} rowStart={2} justifySelf="center">
-        <Select value="bar" size="lg" w="10vw" ml={5} borderRadius="15px">
-          <option value="bar">Bar</option>
-          <option value="line">Line</option>
+        <Select
+          value={controlContext.state.dataset}
+          size="lg"
+          w="10vw"
+          ml={5}
+          borderRadius="15px"
+          onChange={(e) =>
+            controlContext.dispatch({
+              type: Actions.setDataset,
+              payload: e.target.value,
+            })
+          }
+        >
+          <option value="combined">Combined</option>
+          <option value="scheduled">Scheduled</option>
+          <option value="chartered">Chartered</option>
         </Select>
       </GridItem>
       <GridItem
@@ -45,12 +58,24 @@ const BarGraphControls = () => {
         alignSelf="flex-end"
         justifySelf="center"
       >
-        <Text>Select X Axis:</Text>
+        <Text>Select Chart Type:</Text>
       </GridItem>
       <GridItem colStart={2} rowStart={2} justifySelf="center">
-        <Select value="month" size="lg" w="10vw" ml={5} borderRadius="15px">
-          <option value="month"> Month</option>
-          <option value="airport">Airport</option>
+        <Select
+          value={controlContext.state.graphType}
+          size="lg"
+          w="10vw"
+          ml={5}
+          borderRadius="15px"
+          onChange={(e) =>
+            controlContext.dispatch({
+              type: Actions.setGraphType,
+              payload: e.target.value,
+            })
+          }
+        >
+          <option value="bar">Bar</option>
+          <option value="line">Line</option>
         </Select>
       </GridItem>
       <GridItem
@@ -59,22 +84,54 @@ const BarGraphControls = () => {
         alignSelf="flex-end"
         justifySelf="center"
       >
-        <Text>Select Y Axis:</Text>
+        <Text>Select X Axis:</Text>
       </GridItem>
       <GridItem colStart={3} rowStart={2} justifySelf="center">
         <Select
-          value="average-delay"
+          value={controlContext.state.xAxis}
           size="lg"
           w="10vw"
           ml={5}
           borderRadius="15px"
+          onChange={(e) =>
+            controlContext.dispatch({
+              type: Actions.setXAxis,
+              payload: e.target.value,
+            })
+          }
+        >
+          <option value="month"> Month</option>
+          <option value="airport">Airport</option>
+        </Select>
+      </GridItem>
+      <GridItem
+        colStart={4}
+        rowStart={1}
+        alignSelf="flex-end"
+        justifySelf="center"
+      >
+        <Text>Select Y Axis:</Text>
+      </GridItem>
+      <GridItem colStart={4} rowStart={2} justifySelf="center">
+        <Select
+          value={controlContext.state.yAxis}
+          size="lg"
+          w="10vw"
+          ml={5}
+          borderRadius="15px"
+          onChange={(e) =>
+            controlContext.dispatch({
+              type: Actions.setYAxis,
+              payload: e.target.value,
+            })
+          }
         >
           <option value="average-delay">Average Delay</option>
           <option value="arrival-time-between">Time between</option>
         </Select>
       </GridItem>
       <GridItem
-        colStart={4}
+        colStart={5}
         colSpan={2}
         rowStart={1}
         alignSelf="flex-end"
@@ -83,7 +140,7 @@ const BarGraphControls = () => {
         <Text>Select Delay:</Text>
       </GridItem>
       <GridItem
-        colStart={4}
+        colStart={5}
         colSpan={2}
         rowStart={2}
         alignSelf="center"
