@@ -1,6 +1,6 @@
 import { Flex, VStack } from "@chakra-ui/react";
 import BarGraph from "./BarGraph/BarGraph";
-import BarGraphControls from "./GraphControls";
+import BarGraphControls from "./Interface/GraphControls";
 import Description from "./Description";
 import { createContext } from "react";
 import { useReducer } from "react";

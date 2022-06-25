@@ -9,11 +9,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useContext } from "react";
-import { GraphControlsContext } from "./Graph";
-import { Actions } from "./GraphReducer";
+import { GraphControlsContext } from "../Graph";
+import { Actions } from "../GraphReducer";
 
 const BarGraphControls = () => {
   const controlContext = useContext(GraphControlsContext);
+  
 
   return (
     <Grid
