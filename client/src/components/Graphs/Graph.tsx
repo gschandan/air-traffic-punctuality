@@ -2,25 +2,20 @@ import { Flex, VStack } from "@chakra-ui/react";
 import BarGraph from "./BarGraph/BarGraph";
 import BarGraphControls from "./Interface/GraphControls";
 import Description from "./Description";
-import { createContext } from "react";
-import { useReducer } from "react";
-import GraphReducer from "./GraphReducer";
+import {graphControlsReducer} from "./Interface/graphControlsSlice";
 import { createStore, applyMiddleware, Store } from "redux"
+import {configureStore} from "@reduxjs/toolkit"
 import { Provider } from "react-redux"
 import thunk from "redux-thunk"
+import { GraphControlAction, GraphControlDispatch, GraphControlState } from "./Interface/Types/graphControlTypes";
 
 
-const useGraphReducer = () => {
-  const [state, dispatch] = useReducer(
-    GraphReducer,
-    GraphControlsInitialValues
-  );
-  return { state, dispatch };
-};
+const graphControlStore: Store<GraphControlState, GraphControlAction> 
+& {dispatch: GraphControlDispatch} = createStore(graphControlsReducer)
 
 const Graph = () => {
   return (
-    <GraphControlsContext.Provider value={useGraphReducer()}>
+    <Provider store={graphControlStore}>
       <Flex flexDir="row">
         <VStack ml={10} width="65vw">
           <BarGraph></BarGraph>
@@ -28,7 +23,7 @@ const Graph = () => {
         </VStack>
         <Description />
       </Flex>
-    </GraphControlsContext.Provider>
+    </Provider>
   );
 };
 

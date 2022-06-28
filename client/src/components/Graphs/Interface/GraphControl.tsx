@@ -2,7 +2,7 @@ import { Select, Text, VStack } from "@chakra-ui/react";
 import { FC } from "react";
 import { useContext } from "react";
 import { GraphControlsContext } from "../Graph";
-import { ActionsType, GraphControlsState } from "../GraphReducer";
+import { ActionsType, GraphControlsState } from "./graphControlsSlice";
 
 
 
