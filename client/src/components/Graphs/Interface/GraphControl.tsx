@@ -1,19 +1,12 @@
 import { Select, Text, VStack } from "@chakra-ui/react";
-import { FC } from "react";
-import { useContext } from "react";
-import { GraphControlsContext } from "../Graph";
-import { ActionsType, GraphControlsState } from "./graphControlsSlice";
+import { IGraphControl } from "./Types/graphControlTypes";
 
-
-
-const GraphControl: FC<IGraphControlProps> = ({
+const GraphControl = ({
   width,
   label,
   selectOptions,
-  action,
-}): JSX.Element => {
-  const controlContext = useContext(GraphControlsContext);
-
+  selectedOption,
+}: IGraphControl): JSX.Element => {
   const options = selectOptions.map((opt, i) => (
     <option value={opt.value} key={i}>
       {opt.text}
@@ -24,16 +17,16 @@ const GraphControl: FC<IGraphControlProps> = ({
     <VStack justifySelf="center">
       <Text>{label}</Text>
       <Select
-        value={controlContext.state.dataset}
+        value={selectedOption.value}
         size="lg"
         w={width}
         borderRadius="15px"
-        onChange={(e) =>
-          controlContext.dispatch({
-            type: action,
-            payload: e.target.value,
-          })
-        }
+        // onChange={(e) =>
+        //   controlContext.dispatch({
+        //     type: action,
+        //     payload: e.target.value,
+        //   })
+        // }
       >
         {options}
       </Select>
