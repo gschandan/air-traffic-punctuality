@@ -4,11 +4,11 @@ import BarGraphControls from "./Interface/GraphControls";
 import Description from "./Description";
 import { createContext } from "react";
 import { useReducer } from "react";
-import GraphReducer, { GraphControlsInitialValues } from "./GraphReducer";
+import GraphReducer from "./GraphReducer";
+import { createStore, applyMiddleware, Store } from "redux"
+import { Provider } from "react-redux"
+import thunk from "redux-thunk"
 
-export const GraphControlsContext = createContext(
-  {} as ReturnType<typeof useGraphReducer>
-);
 
 const useGraphReducer = () => {
   const [state, dispatch] = useReducer(

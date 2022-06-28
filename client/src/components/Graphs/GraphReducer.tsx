@@ -1,41 +1,73 @@
-export const Actions = {
-  setXAxis: "setXAxis",
-  setYAxis: "setYAxis",
-  setGraphType: "setGraphType",
-  setDataset: "setDataset",
-};
+import {
+  controlLabels,
+  graphControlsInitialState,
+} from "./Interface/GraphControlsInitialState";
+import {
+  SET_DATASET,
+  SET_GRAPH_TYPE,
+  SET_XAXIS,
+  SET_YAXIS,
+} from "./Interface/Types/graphControlActionTypes.d copy";
+import {
+  GraphControlAction,
+  GraphControlState,
+  IGraphControl,
+} from "./Interface/Types/graphControlTypes";
 
-export const GraphControlsInitialValues = {
-  xAxis: "month",
-  yAxis: "average-delay",
-  graphType: "bar",
-  dataset: "combined",
-};
+const GraphReducer = (
+  state: GraphControlState = graphControlsInitialState,
+  action: GraphControlAction
+): GraphControlState => {
+  const { type, control } = action;
 
-const GraphReducer = (state: any, action: { type: any; payload: any }) => {
-  switch (action.type) {
-    case Actions.setXAxis:
+  switch (type) {
+    case SET_XAXIS: {
+      const controlIndex: number = state.controls.findIndex(
+        (x) => x.label === controlLabels.xaxis
+      );
+      const newControlState = [...state.controls];
+      newControlState[controlIndex].selectedOption = control;
       return {
         ...state,
-        xAxis: action.payload,
+        controls: newControlState,
       };
-    case Actions.setYAxis:
+    }
+    case SET_YAXIS: {
+      const controlIndex: number = state.controls.findIndex(
+        (x) => x.label === controlLabels.yaxis
+      );
+      const newControlState = [...state.controls];
+      newControlState[controlIndex].selectedOption = control;
       return {
         ...state,
-        yAxis: action.payload,
+        controls: newControlState,
       };
-    case Actions.setGraphType:
+    }
+    case SET_GRAPH_TYPE: {
+      const controlIndex: number = state.controls.findIndex(
+        (x) => x.label === controlLabels.graphType
+      );
+      const newControlState = [...state.controls];
+      newControlState[controlIndex].selectedOption = control;
       return {
         ...state,
-        graphType: action.payload,
+        controls: newControlState,
       };
-    case Actions.setDataset:
+    }
+    case SET_DATASET: {
+      const controlIndex: number = state.controls.findIndex(
+        (x) => x.label === controlLabels.dataset
+      );
+      const newControlState = [...state.controls];
+      newControlState[controlIndex].selectedOption = control;
       return {
         ...state,
-        dataset: action.payload,
+        controls: newControlState,
       };
-    default:
+    }
+    default: {
       return state;
+    }
   }
 };
 
