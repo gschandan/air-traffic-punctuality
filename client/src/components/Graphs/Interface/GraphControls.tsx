@@ -1,10 +1,13 @@
 import { HStack } from "@chakra-ui/react";
 import GraphControl from "./GraphControl";
-import { graphControlsInitialState } from "./GraphControlsInitialState";
-import { GraphControlState, IGraphControl } from "./Types/graphControlTypes";
+import {
+  GraphControlState,
+  IGraphControl,
+  initialState,
+} from "../../../features/graphControlsSlice";
 
 const BarGraphControls = () => {
-  const controlSettings: GraphControlState = graphControlsInitialState;
+  const controlSettings: GraphControlState = initialState;
 
   const controls = controlSettings.controls.map(
     (control: IGraphControl, i: number) => <GraphControl {...control} key={i} />

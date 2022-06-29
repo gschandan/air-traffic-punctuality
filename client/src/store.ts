@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import graphControlsSlice from "./components/Graphs/Interface/graphControlsSlice";
+import graphControlsSlice from "./features/graphControlsSlice";
 
 export const store = configureStore({
   reducer: {

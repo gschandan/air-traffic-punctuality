@@ -1,5 +1,12 @@
 import { Select, Text, VStack } from "@chakra-ui/react";
-import { IGraphControl } from "./Types/graphControlTypes";
+import { IGraphControl } from "../../../features/graphControlsSlice";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import {
+  setXAxis,
+  setYAxis,
+  setDataset,
+  setGraphType,
+} from "../../../features/graphControlsSlice";
 
 const GraphControl = ({
   width,
@@ -13,20 +20,22 @@ const GraphControl = ({
     </option>
   ));
 
+  const value = useAppSelector((state) => {
+    const index = state.graphControls.controls.findIndex(
+      (x) => x.label === label
+    );
+    return state.graphControls.controls[index].selectedOption;
+  });
+  const dispatch = useAppDispatch();
+
   return (
     <VStack justifySelf="center">
       <Text>{label}</Text>
       <Select
-        value={selectedOption.value}
         size="lg"
         w={width}
         borderRadius="15px"
-        // onChange={(e) =>
-        //   controlContext.dispatch({
-        //     type: action,
-        //     payload: e.target.value,
-        //   })
-        // }
+        onChange={() => dispatch(setDataset(value))}
       >
         {options}
       </Select>
