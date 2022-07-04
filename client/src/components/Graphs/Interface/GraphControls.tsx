@@ -1,17 +1,15 @@
 import { HStack } from "@chakra-ui/react";
 import GraphControl from "./GraphControl";
-import {
-  GraphControlState,
-  IGraphControl,
-  initialState,
-} from "../../../features/graphControlsSlice";
+import { IGraphControl } from "../../../features/graphControlTypes";
+import { useAppSelector, useAppDispatch } from "../../../hooks";
+import { setDataset } from "../../../features/datasetSlice";
+import { setGraphType } from "../../../features/graphTypeSlice";
+import { setXAxis } from "../../../features/xAxisSlice";
+import { setYAxis } from "../../../features/yAxisSlice";
 
 const BarGraphControls = () => {
-  const controlSettings: GraphControlState = initialState;
-
-  const controls = controlSettings.controls.map(
-    (control: IGraphControl, i: number) => <GraphControl {...control} key={i} />
-  );
+  const { dataset, graphType, xAxis, yAxis } = useAppSelector((state) => state);
+  const dispatch = useAppDispatch();
 
   return (
     <HStack
@@ -22,7 +20,11 @@ const BarGraphControls = () => {
       justifyContent="space-evenly"
       px={8}
     >
-      {controls}
+      <GraphControl
+        width={dataset.width}
+        label={dataset.label}
+        selectOptions={dataset.selectOptions}
+      />
     </HStack>
   );
 };

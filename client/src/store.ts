@@ -1,9 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
-import graphControlsSlice from "./features/graphControlsSlice";
+import datasetSlice from "./features/datasetSlice";
+import graphTypeSlice from "./features/graphTypeSlice";
+import xAxisSlice from "./features/xAxisSlice";
+import yAxisSlice from "./features/yAxisSlice";
 
 export const store = configureStore({
   reducer: {
-    graphControls: graphControlsSlice,
+    dataset: datasetSlice,
+    graphType: graphTypeSlice,
+    xAxis: xAxisSlice,
+    yAxis: yAxisSlice,
   },
 });
 

@@ -2,17 +2,13 @@ export interface IGraphControlOption {
   value: string;
   text: string;
   category: string;
+  selected: boolean;
 }
 
 export interface IGraphControl {
   width: string;
   label: string;
-  selectOptions: { [option: string]: IGraphControlOption };
-  selectedOption: string;
-}
-
-export interface GraphControlState {
-  [control: string]: IGraphControl;
+  selectOptions: IGraphControlOption[];
 }
 
 export const controlLabels = {
@@ -20,11 +16,4 @@ export const controlLabels = {
   graphType: "Select Graph Type:",
   xaxis: "Select X Axis:",
   yaxis: "Select Y Axis:",
-} as const;
-
-export const options = {
-  dataset: "dataset",
-  graphType: "graphType",
-  xaxis: "xAxis",
-  yaxis: "yAxis",
 } as const;
