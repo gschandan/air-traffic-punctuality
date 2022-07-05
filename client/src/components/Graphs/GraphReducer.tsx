@@ -6,13 +6,16 @@ export const Actions = {
 };
 
 export const GraphControlValues = {
-  xAxis: "month",
-  yAxis: "average-delay",
+  xAxis: "airport",
+  yAxis: "averagedelay",
   graphType: "bar",
   dataset: "combined",
 };
 
-const GraphReducer = (state: typeof GraphControlValues, action: { type: any; payload: any }) => {
+const GraphReducer = (
+  state: typeof GraphControlValues,
+  action: { type: any; payload: any }
+) => {
   switch (action.type) {
     case Actions.setXAxis:
       return {

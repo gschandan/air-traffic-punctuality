@@ -117,8 +117,8 @@ const BarGraphControls = () => {
             })
           }
         >
-          <option value="average-delay">Average Delay</option>
-          <option value="arrival-time-between">Time between</option>
+          <option value="averagedelay">Average Delay</option>
+          <option value="arrivalbetween">Time between</option>
         </Select>
       </GridItem>
     </Grid>

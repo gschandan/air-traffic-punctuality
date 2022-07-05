@@ -4,20 +4,25 @@ import { AirTraffic } from "../../../types/airTrafficData";
 import * as d3 from "d3";
 import { GraphControlsContext } from "../Graph";
 
+interface CombinedMonthAverageDelay {
+  month: string;
+  average_delay: number;
+}
+
 const BarGraph = () => {
-  const [data, setData] = useState<AirTraffic[]>();
+  const [data, setData] = useState<CombinedMonthAverageDelay[]>();
   const [error, setError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const controlContext = useContext(GraphControlsContext);
   const urlBuilder = (): string =>
     "http://localhost:5001/api/" +
     controlContext.state.dataset +
-    "/?xAxis=" +
+    "/" +
+    controlContext.state.graphType +
+    "/" +
     controlContext.state.xAxis +
-    "&yAxis=" +
-    controlContext.state.yAxis +
-    "&graphType=" +
-    controlContext.state.graphType;
+    "/" +
+    controlContext.state.yAxis;
   const [url, setUrl] = useState<string>(urlBuilder);
 
   const graph = useRef<SVGSVGElement>(null);
@@ -46,7 +51,7 @@ const BarGraph = () => {
   }, [errorMessage, themeColor, url]);
 
   const buildBarGraph = (
-    airTraffic: AirTraffic[],
+    airTraffic: CombinedMonthAverageDelay[],
     height: number,
     width: number
   ) => {
@@ -62,13 +67,10 @@ const BarGraph = () => {
     const calcWidth = width - margin.left - margin.right;
     const calcHeight = height - margin.top - margin.bottom;
 
-    const groupedDataByMonth = groupedDelaysByMonthAllAirports(airTraffic);
-    const averagedData = averageGroupedDelaysByMonth(groupedDataByMonth);
-
     const xAxis = d3
       .scaleBand()
       .range([0, calcWidth])
-      .domain(Object.keys(groupedDataByMonth))
+      .domain(airTraffic.map((x) => x.month))
       .padding(0.5);
 
     barGraph
@@ -77,7 +79,10 @@ const BarGraph = () => {
       .attr("y", calcHeight + margin.bottom)
       .style("text-anchor", "middle")
       .attr("fill", themeColor === "light" ? "#000000" : "#ffffff")
-      .text("Month");
+      .text(
+        controlContext.state.xAxis[0].toUpperCase() +
+          controlContext.state.xAxis.slice(1)
+      );
 
     barGraph
       .append("g")
@@ -89,7 +94,7 @@ const BarGraph = () => {
 
     const yAxis = d3
       .scaleLinear()
-      .domain([0, Math.max(...averagedData.map((d) => d.average)) + 3])
+      .domain([0, Math.max(...airTraffic.map((x) => x.average_delay)) + 3])
       .range([calcHeight, 0]);
 
     barGraph
@@ -100,13 +105,17 @@ const BarGraph = () => {
       .attr("dy", "1em")
       .style("text-anchor", "middle")
       .attr("fill", themeColor === "light" ? "#000000" : "#ffffff")
-      .text("Average Delay (minutes)");
+      .text(
+        controlContext.state.yAxis[0].toUpperCase() +
+          controlContext.state.yAxis.slice(1) +
+          " (minutes)"
+      );
 
     barGraph.append("g").call(d3.axisLeft(yAxis));
 
     barGraph
       .selectAll("mybar")
-      .data(averagedData)
+      .data(airTraffic)
       .enter()
       .append("rect")
       .attr("x", function (d): any {
@@ -123,46 +132,16 @@ const BarGraph = () => {
 
     barGraph
       .selectAll("rect")
-      .data(averagedData)
+      .data(airTraffic)
       .transition()
       .duration(1000)
       .attr("y", function (d): any {
-        return yAxis(d.average);
+        return yAxis(d.average_delay);
       })
       .attr("height", function (d) {
-        return calcHeight - yAxis(d.average);
+        return calcHeight - yAxis(d.average_delay);
       });
   };
-
-  const averageGroupedDelaysByMonth = (data: any) => {
-    const results: AverageDelayAllAirportsByMonth[] = [];
-    Object.keys(data).forEach((key) => {
-      let value = data[key];
-      let average =
-        value.reduce((a: number, b: number) => a + b, 0) / value.length || 0;
-      results.push({
-        month: key,
-        average: Number(average.toPrecision(2)),
-      });
-    });
-    return results;
-  };
-
-  const groupedDelaysByMonthAllAirports = (data: AirTraffic[]) => {
-    return data.reduce((acc: any, item) => {
-      acc[item.month] = acc[item.month] || [];
-      acc[item.month].push(item.average_delay_minutes);
-      return acc;
-    }, new DelayAllAirportsByMonth());
-  };
-
-  class DelayAllAirportsByMonth {
-    [Key: string]: number[];
-  }
-  interface AverageDelayAllAirportsByMonth {
-    month: string;
-    average: number;
-  }
 
   return (
     <Box width="60vw" height="60vh" pl="10vw">

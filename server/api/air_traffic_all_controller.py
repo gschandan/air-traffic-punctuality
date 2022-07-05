@@ -1,11 +1,24 @@
-from typing import List
-from fastapi import APIRouter, Depends
+from typing import List, Optional
+from fastapi import APIRouter, Depends, Request
+from pydantic import BaseModel
 import sqlalchemy.orm as orm
-import schemas.air_traffic_schema as air_traffic_schema
 import data.repositories.air_traffic_all_repository as air_traffic_repository
 
 router_combined = APIRouter()
 
-@router_combined.get("/", response_model=list[air_traffic_schema.AirTraffic])
-async def get_all(xAxis: str, yAxis: str, graphType: str, db: orm.Session = Depends(air_traffic_repository.get_database)) -> List[air_traffic_schema.AirTrafficBase]:
-    return await air_traffic_repository.get_all(db)
+class CombinedMonthAverageDelay(BaseModel):
+    month: str
+    average_delay: float
+
+class CombinedAirportAverageDelay(BaseModel):
+    airport: str
+    average_delay: float
+
+@router_combined.get("/bar/month/averagedelay", response_model=list[CombinedMonthAverageDelay])
+async def get(db: orm.Session = Depends(air_traffic_repository.get_database)) -> List[CombinedMonthAverageDelay]:
+    print("HERE")
+    return await air_traffic_repository.get_month_delay(db)
+
+@router_combined.get("/bar/airport/averagedelay", response_model=list[CombinedAirportAverageDelay])
+async def get(db: orm.Session = Depends(air_traffic_repository.get_database)) -> List[CombinedAirportAverageDelay]:
+    return await air_traffic_repository.get_airport_delay(db)
