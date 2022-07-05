@@ -1,27 +1,17 @@
-import {
-  Grid,
-  GridItem,
-  RangeSlider,
-  RangeSliderFilledTrack,
-  RangeSliderThumb,
-  RangeSliderTrack,
-  Select,
-  Text,
-} from "@chakra-ui/react";
+import { Grid, GridItem, Select, Text } from "@chakra-ui/react";
 import { useContext } from "react";
 import { GraphControlsContext } from "../Graph";
 import { Actions } from "../GraphReducer";
 
 const BarGraphControls = () => {
   const controlContext = useContext(GraphControlsContext);
-  
 
   return (
     <Grid
       height="15vh"
       width="60vw"
       templateRows="repeat(3, 1fr)"
-      templateColumns="repeat(6, 1fr)"
+      templateColumns="repeat(4, 1fr)"
       gap={4}
       boxShadow="0 5px 10px 0 rgba(0,0,0,0.08)"
       borderRadius="35px"
@@ -130,38 +120,6 @@ const BarGraphControls = () => {
           <option value="average-delay">Average Delay</option>
           <option value="arrival-time-between">Time between</option>
         </Select>
-      </GridItem>
-      <GridItem
-        colStart={5}
-        colSpan={2}
-        rowStart={1}
-        alignSelf="flex-end"
-        justifySelf="center"
-      >
-        <Text>Select Delay:</Text>
-      </GridItem>
-      <GridItem
-        colStart={5}
-        colSpan={2}
-        rowStart={2}
-        alignSelf="center"
-        ml={5}
-        pr={3}
-      >
-        <RangeSlider
-          aria-label={["min", "max"]}
-          colorScheme="blue"
-          defaultValue={[60, 120]}
-          min={0}
-          max={360}
-          step={60}
-        >
-          <RangeSliderTrack>
-            <RangeSliderFilledTrack bg="rgb(39 157 210)" />
-          </RangeSliderTrack>
-          <RangeSliderThumb index={0} />
-          <RangeSliderThumb index={1} />
-        </RangeSlider>
       </GridItem>
     </Grid>
   );

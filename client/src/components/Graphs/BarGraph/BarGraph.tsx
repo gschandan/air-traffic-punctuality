@@ -1,17 +1,34 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Box, Text, useColorModeValue } from "@chakra-ui/react";
 import { AirTraffic } from "../../../types/airTrafficData";
 import * as d3 from "d3";
+import { GraphControlsContext } from "../Graph";
 
 const BarGraph = () => {
   const [data, setData] = useState<AirTraffic[]>();
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [error, setError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const controlContext = useContext(GraphControlsContext);
+  const urlBuilder = (): string =>
+    "http://localhost:5001/api/" +
+    controlContext.state.dataset +
+    "/?xAxis=" +
+    controlContext.state.xAxis +
+    "&yAxis=" +
+    controlContext.state.yAxis +
+    "&graphType=" +
+    controlContext.state.graphType;
+  const [url, setUrl] = useState<string>(urlBuilder);
+
   const graph = useRef<SVGSVGElement>(null);
   const themeColor = useColorModeValue("light", "dark");
 
   useEffect(() => {
-    fetch("http://localhost:5001/api/combined/all")
+    setUrl(urlBuilder());
+  }, [controlContext.state]);
+
+  useEffect(() => {
+    fetch(url)
       .then((response) => response.json())
       .then((response) => setData(response))
       .then(() => {
@@ -26,14 +43,14 @@ const BarGraph = () => {
         setError(true);
         setErrorMessage(error.message);
       });
-  }, [errorMessage, themeColor]);
+  }, [errorMessage, themeColor, url]);
 
   const buildBarGraph = (
     airTraffic: AirTraffic[],
     height: number,
     width: number
   ) => {
-    const margin = { top: 10, bottom: 55, left: 55, right: 30 };
+    const margin = { top: 10, bottom: 55, left: 50, right: 30 };
 
     const barGraph = d3
       .select(graph.current)

@@ -6,6 +6,6 @@ import data.repositories.air_traffic_all_repository as air_traffic_repository
 
 router_combined = APIRouter()
 
-@router_combined.get("/all", response_model=list[air_traffic_schema.AirTraffic])
-async def get_all(db: orm.Session = Depends(air_traffic_repository.get_database)) -> List[air_traffic_schema.AirTrafficBase]:
+@router_combined.get("/", response_model=list[air_traffic_schema.AirTraffic])
+async def get_all(xAxis: str, yAxis: str, graphType: str, db: orm.Session = Depends(air_traffic_repository.get_database)) -> List[air_traffic_schema.AirTrafficBase]:
     return await air_traffic_repository.get_all(db)

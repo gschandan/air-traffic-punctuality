@@ -3,10 +3,8 @@ import {
   Select,
   Text,
 } from "@chakra-ui/react";
-import { FC } from "react";
 import { useContext } from "react";
 import { GraphControlsContext } from "../Graph";
-import { Actions } from "../GraphReducer";
 
 interface GraphControlSelectValues {
   value: string;
@@ -25,7 +23,7 @@ export interface BarGraphControlProps{
   }
 }
 
-const BarGraphControl : FC<BarGraphControlProps> = ({colStart, colSpan, rowStart, width, label, selectOptions, action}): JSX.Element => {
+const BarGraphControl = ({colStart, colSpan, rowStart, width, label, selectOptions, action}:BarGraphControlProps): JSX.Element => {
   const controlContext = useContext(GraphControlsContext);
   
   const options = selectOptions.map((opt, i) => <option value={opt.value} key={i}>{opt.text}</option>)
