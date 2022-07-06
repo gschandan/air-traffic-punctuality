@@ -1,7 +1,8 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { Box, Text, useColorModeValue } from "@chakra-ui/react";
+import { Box, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import * as d3 from "d3";
 import { GraphControlsContext } from "../Graph";
+import { months } from "../../../types/airTrafficData";
 
 type CombinedMonthAverageDelay = {
   month: string;
@@ -43,7 +44,7 @@ const BarGraph = () => {
       .then((response) => setData(response))
       .then(() => {
         if (data !== undefined) {
-          buildBarGraph(data, 500, 500);
+          buildBarGraph(data, 500, 600);
           setError(false);
         } else {
           throw new Error("Unable to load the data");
@@ -55,8 +56,8 @@ const BarGraph = () => {
       });
   }, [errorMessage, themeColor, url]);
 
-  const buildBarGraph = (airTraffic: any, height: number, width: number) => {
-    const margin = { top: 10, bottom: 55, left: 50, right: 30 };
+  const buildBarGraph = (airTraffic: any[], height: number, width: number) => {
+    const margin = { top: 10, bottom: 100, left: 50, right: 10 };
 
     const barGraph = d3
       .select(graph.current)
@@ -76,34 +77,25 @@ const BarGraph = () => {
           ? airTraffic.map((x: CombinedMonthAverageDelay) => x.month)
           : airTraffic.map((x: CombinedAirportAverageDelay) => x.airport)
       )
-      .padding(0.5);
-
-    barGraph
-      .append("text")
-      .attr("x", calcWidth / 2)
-      .attr("y", calcHeight + margin.bottom)
-      .style("text-anchor", "middle")
-      .attr("fill", themeColor === "light" ? "#000000" : "#ffffff")
-      .text(
-        controlContext.state.xAxis[0].toUpperCase() +
-          controlContext.state.xAxis.slice(1)
-      );
+      .padding(0.2);
 
     barGraph
       .append("g")
       .attr("transform", `translate(0, ${calcHeight})`)
       .call(d3.axisBottom(xAxis))
       .selectAll("text")
-      .attr("transform", "translate(10,5)")
-      .style("text-anchor", "end");
+      .attr("transform", "translate(5,5)")
+      .attr("transform", "rotate(-45)")
+      .style("text-anchor", "end")
+      .style("font-size", "8px");
 
     const yAxis = d3
       .scaleLinear()
       .domain([
         0,
         Math.max(
-          ...airTraffic.map((x: CombinedMonthAverageDelay) => x.average_delay)
-        ) + 3,
+          ...airTraffic.map((x: CombinedAirportAverageDelay) => x.average_delay)
+        ) + 2,
       ])
       .range([calcHeight, 0]);
 
@@ -114,6 +106,7 @@ const BarGraph = () => {
       .attr("x", 0 - calcHeight / 2)
       .attr("dy", "1em")
       .style("text-anchor", "middle")
+      .style("font-size", "12px")
       .attr("fill", themeColor === "light" ? "#000000" : "#ffffff")
       .text(
         controlContext.state.yAxis[0].toUpperCase() +
@@ -129,7 +122,13 @@ const BarGraph = () => {
       .enter()
       .append("rect")
       .attr("x", function (d: any): any {
-        return controlContext.state.xAxis === "month" ? d.month : d.airport;
+        if (controlContext.state.xAxis === "month") {
+          airTraffic.sort(
+            (a, b) => months.indexOf(a.month) - months.indexOf(b.month)
+          );
+          return xAxis(d.month);
+        }
+        return xAxis(d.airport);
       })
       .attr("width", xAxis.bandwidth())
       .attr("fill", "rgb(39 157 210)")
@@ -154,15 +153,15 @@ const BarGraph = () => {
   };
 
   return (
-    <Box width="60vw" height="60vh" pl="10vw">
+    <Flex width="70vw" height="65vh" justify="center">
       {error && (
         <Text fontSize="3xl">
           Unfortunately an error occurred when trying to fetch the data. Further
           information: {errorMessage}
         </Text>
       )}
-      <svg ref={graph} width="60vw" height="60vh"></svg>
-    </Box>
+      <svg ref={graph} width="70vw" height="60vh"></svg>
+    </Flex>
   );
 };
 

@@ -1,4 +1,4 @@
-import { Flex, VStack } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import BarGraph from "./BarGraph/BarGraph";
 import BarGraphControls from "./Interface/GraphControls";
 import Description from "./Description";
@@ -18,11 +18,16 @@ const useGraphReducer = () => {
 const Graph = () => {
   return (
     <GraphControlsContext.Provider value={useGraphReducer()}>
-      <Flex flexDir="row">
-        <VStack ml={10} width="65vw">
+      <Flex flexDir="row" width="90vw">
+        <Flex
+          flexDir="column"
+          width="65vw"
+          height="80vh"
+          justify="space-between"
+        >
           <BarGraph></BarGraph>
           <BarGraphControls></BarGraphControls>
-        </VStack>
+        </Flex>
         <Description />
       </Flex>
     </GraphControlsContext.Provider>
