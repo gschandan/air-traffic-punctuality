@@ -84,8 +84,7 @@ const BarGraph = () => {
       .attr("transform", `translate(0, ${calcHeight})`)
       .call(d3.axisBottom(xAxis))
       .selectAll("text")
-      .attr("transform", "translate(5,5)")
-      .attr("transform", "rotate(-45)")
+      .attr("transform", "translate(-5,2) rotate(-45)")
       .style("text-anchor", "end")
       .style("font-size", "8px");
 
@@ -137,6 +136,14 @@ const BarGraph = () => {
       })
       .attr("y", function (d) {
         return yAxis(0);
+      })
+      .on("mouseover", function () {
+        d3.select(this).attr("fill", "rgb(162, 44, 39)");
+      })
+      .on("mouseout", function (d, i) {
+        d3.select(this).attr("fill", function () {
+          return "rgb(39 157 210)";
+        });
       });
 
     barGraph
