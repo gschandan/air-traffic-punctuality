@@ -1,16 +1,21 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { Box, Text, useColorModeValue } from "@chakra-ui/react";
-import { AirTraffic } from "../../../types/airTrafficData";
 import * as d3 from "d3";
 import { GraphControlsContext } from "../Graph";
 
-interface CombinedMonthAverageDelay {
+type CombinedMonthAverageDelay = {
   month: string;
   average_delay: number;
-}
+};
+
+type CombinedAirportAverageDelay = {
+  airport: string;
+  average_delay: number;
+};
 
 const BarGraph = () => {
-  const [data, setData] = useState<CombinedMonthAverageDelay[]>();
+  const [data, setData] =
+    useState<(CombinedMonthAverageDelay | CombinedAirportAverageDelay)[]>();
   const [error, setError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const controlContext = useContext(GraphControlsContext);
@@ -50,11 +55,7 @@ const BarGraph = () => {
       });
   }, [errorMessage, themeColor, url]);
 
-  const buildBarGraph = (
-    airTraffic: CombinedMonthAverageDelay[],
-    height: number,
-    width: number
-  ) => {
+  const buildBarGraph = (airTraffic: any, height: number, width: number) => {
     const margin = { top: 10, bottom: 55, left: 50, right: 30 };
 
     const barGraph = d3
@@ -70,7 +71,11 @@ const BarGraph = () => {
     const xAxis = d3
       .scaleBand()
       .range([0, calcWidth])
-      .domain(airTraffic.map((x) => x.month))
+      .domain(
+        controlContext.state.xAxis === "month"
+          ? airTraffic.map((x: CombinedMonthAverageDelay) => x.month)
+          : airTraffic.map((x: CombinedAirportAverageDelay) => x.airport)
+      )
       .padding(0.5);
 
     barGraph
@@ -94,7 +99,12 @@ const BarGraph = () => {
 
     const yAxis = d3
       .scaleLinear()
-      .domain([0, Math.max(...airTraffic.map((x) => x.average_delay)) + 3])
+      .domain([
+        0,
+        Math.max(
+          ...airTraffic.map((x: CombinedMonthAverageDelay) => x.average_delay)
+        ) + 3,
+      ])
       .range([calcHeight, 0]);
 
     barGraph
@@ -118,8 +128,8 @@ const BarGraph = () => {
       .data(airTraffic)
       .enter()
       .append("rect")
-      .attr("x", function (d): any {
-        return xAxis(d.month);
+      .attr("x", function (d: any): any {
+        return controlContext.state.xAxis === "month" ? d.month : d.airport;
       })
       .attr("width", xAxis.bandwidth())
       .attr("fill", "rgb(39 157 210)")
@@ -135,10 +145,10 @@ const BarGraph = () => {
       .data(airTraffic)
       .transition()
       .duration(1000)
-      .attr("y", function (d): any {
+      .attr("y", function (d: any): any {
         return yAxis(d.average_delay);
       })
-      .attr("height", function (d) {
+      .attr("height", function (d: any) {
         return calcHeight - yAxis(d.average_delay);
       });
   };
