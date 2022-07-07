@@ -15,13 +15,18 @@ type CombinedAirportAverageDelay = {
 };
 
 const BarGraph = () => {
+  const baseUrl =
+    process.env.NODE_ENV === "development"
+      ? process.env.REACT_APP_DEV_DOMAIN
+      : process.env.REACT_APP_PROD_DOMAIN;
+
   const [data, setData] =
     useState<(CombinedMonthAverageDelay | CombinedAirportAverageDelay)[]>();
   const [error, setError] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const controlContext = useContext(GraphControlsContext);
   const urlBuilder = (): string =>
-    "http://localhost:5001/api/" +
+    baseUrl +
     controlContext.state.dataset +
     "/" +
     controlContext.state.graphType +
