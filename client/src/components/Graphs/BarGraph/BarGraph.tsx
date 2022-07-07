@@ -1,22 +1,50 @@
-import { useEffect, useRef, useState } from "react";
-import { Box, Text, useColorModeValue } from "@chakra-ui/react";
-import { AirTraffic } from "../../../types/airTrafficData";
+import { useContext, useEffect, useRef, useState } from "react";
+import { Box, Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import * as d3 from "d3";
+import { GraphControlsContext } from "../Graph";
+import { months } from "../../../types/airTrafficData";
+
+type CombinedMonthAverageDelay = {
+  month: string;
+  average_delay: number;
+};
+
+type CombinedAirportAverageDelay = {
+  airport: string;
+  average_delay: number;
+};
 
 const BarGraph = () => {
-  const [data, setData] = useState<AirTraffic[]>();
-  const [error, setError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [data, setData] =
+    useState<(CombinedMonthAverageDelay | CombinedAirportAverageDelay)[]>();
+  const [error, setError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const controlContext = useContext(GraphControlsContext);
+  const urlBuilder = (): string =>
+    "http://localhost:5001/api/" +
+    controlContext.state.dataset +
+    "/" +
+    controlContext.state.graphType +
+    "/" +
+    controlContext.state.xAxis +
+    "/" +
+    controlContext.state.yAxis;
+  const [url, setUrl] = useState<string>(urlBuilder);
+
   const graph = useRef<SVGSVGElement>(null);
   const themeColor = useColorModeValue("light", "dark");
 
   useEffect(() => {
-    fetch("http://localhost:5001/api/combined/all")
+    setUrl(urlBuilder());
+  }, [controlContext.state]);
+
+  useEffect(() => {
+    fetch(url)
       .then((response) => response.json())
       .then((response) => setData(response))
       .then(() => {
         if (data !== undefined) {
-          buildBarGraph(data, 500, 500);
+          buildBarGraph(data, 500, 600);
           setError(false);
         } else {
           throw new Error("Unable to load the data");
@@ -26,14 +54,10 @@ const BarGraph = () => {
         setError(true);
         setErrorMessage(error.message);
       });
-  }, [errorMessage, themeColor]);
+  }, [errorMessage, themeColor, url]);
 
-  const buildBarGraph = (
-    airTraffic: AirTraffic[],
-    height: number,
-    width: number
-  ) => {
-    const margin = { top: 10, bottom: 55, left: 55, right: 30 };
+  const buildBarGraph = (airTraffic: any[], height: number, width: number) => {
+    const margin = { top: 10, bottom: 100, left: 50, right: 10 };
 
     const barGraph = d3
       .select(graph.current)
@@ -45,34 +69,33 @@ const BarGraph = () => {
     const calcWidth = width - margin.left - margin.right;
     const calcHeight = height - margin.top - margin.bottom;
 
-    const groupedDataByMonth = groupedDelaysByMonthAllAirports(airTraffic);
-    const averagedData = averageGroupedDelaysByMonth(groupedDataByMonth);
-
     const xAxis = d3
       .scaleBand()
       .range([0, calcWidth])
-      .domain(Object.keys(groupedDataByMonth))
-      .padding(0.5);
-
-    barGraph
-      .append("text")
-      .attr("x", calcWidth / 2)
-      .attr("y", calcHeight + margin.bottom)
-      .style("text-anchor", "middle")
-      .attr("fill", themeColor === "light" ? "#000000" : "#ffffff")
-      .text("Month");
+      .domain(
+        controlContext.state.xAxis === "month"
+          ? airTraffic.map((x: CombinedMonthAverageDelay) => x.month)
+          : airTraffic.map((x: CombinedAirportAverageDelay) => x.airport)
+      )
+      .padding(0.2);
 
     barGraph
       .append("g")
       .attr("transform", `translate(0, ${calcHeight})`)
       .call(d3.axisBottom(xAxis))
       .selectAll("text")
-      .attr("transform", "translate(10,5)")
-      .style("text-anchor", "end");
+      .attr("transform", "translate(-5,2) rotate(-45)")
+      .style("text-anchor", "end")
+      .style("font-size", "8px");
 
     const yAxis = d3
       .scaleLinear()
-      .domain([0, Math.max(...averagedData.map((d) => d.average)) + 3])
+      .domain([
+        0,
+        Math.max(
+          ...airTraffic.map((x: CombinedAirportAverageDelay) => x.average_delay)
+        ) + 2,
+      ])
       .range([calcHeight, 0]);
 
     barGraph
@@ -82,18 +105,29 @@ const BarGraph = () => {
       .attr("x", 0 - calcHeight / 2)
       .attr("dy", "1em")
       .style("text-anchor", "middle")
+      .style("font-size", "12px")
       .attr("fill", themeColor === "light" ? "#000000" : "#ffffff")
-      .text("Average Delay (minutes)");
+      .text(
+        controlContext.state.yAxis[0].toUpperCase() +
+          controlContext.state.yAxis.slice(1) +
+          " (minutes)"
+      );
 
     barGraph.append("g").call(d3.axisLeft(yAxis));
 
     barGraph
       .selectAll("mybar")
-      .data(averagedData)
+      .data(airTraffic)
       .enter()
       .append("rect")
-      .attr("x", function (d): any {
-        return xAxis(d.month);
+      .attr("x", function (d: any): any {
+        if (controlContext.state.xAxis === "month") {
+          airTraffic.sort(
+            (a, b) => months.indexOf(a.month) - months.indexOf(b.month)
+          );
+          return xAxis(d.month);
+        }
+        return xAxis(d.airport);
       })
       .attr("width", xAxis.bandwidth())
       .attr("fill", "rgb(39 157 210)")
@@ -102,61 +136,39 @@ const BarGraph = () => {
       })
       .attr("y", function (d) {
         return yAxis(0);
+      })
+      .on("mouseover", function () {
+        d3.select(this).attr("fill", "rgb(162, 44, 39)");
+      })
+      .on("mouseout", function (d, i) {
+        d3.select(this).attr("fill", function () {
+          return "rgb(39 157 210)";
+        });
       });
 
     barGraph
       .selectAll("rect")
-      .data(averagedData)
+      .data(airTraffic)
       .transition()
       .duration(1000)
-      .attr("y", function (d): any {
-        return yAxis(d.average);
+      .attr("y", function (d: any): any {
+        return yAxis(d.average_delay);
       })
-      .attr("height", function (d) {
-        return calcHeight - yAxis(d.average);
+      .attr("height", function (d: any) {
+        return calcHeight - yAxis(d.average_delay);
       });
   };
-
-  const averageGroupedDelaysByMonth = (data: any) => {
-    const results: AverageDelayAllAirportsByMonth[] = [];
-    Object.keys(data).forEach((key) => {
-      let value = data[key];
-      let average =
-        value.reduce((a: number, b: number) => a + b, 0) / value.length || 0;
-      results.push({
-        month: key,
-        average: Number(average.toPrecision(2)),
-      });
-    });
-    return results;
-  };
-
-  const groupedDelaysByMonthAllAirports = (data: AirTraffic[]) => {
-    return data.reduce((acc: any, item) => {
-      acc[item.month] = acc[item.month] || [];
-      acc[item.month].push(item.average_delay_minutes);
-      return acc;
-    }, new DelayAllAirportsByMonth());
-  };
-
-  class DelayAllAirportsByMonth {
-    [Key: string]: number[];
-  }
-  interface AverageDelayAllAirportsByMonth {
-    month: string;
-    average: number;
-  }
 
   return (
-    <Box width="60vw" height="60vh" pl="10vw">
+    <Flex width="70vw" height="65vh" justify="center">
       {error && (
         <Text fontSize="3xl">
           Unfortunately an error occurred when trying to fetch the data. Further
           information: {errorMessage}
         </Text>
       )}
-      <svg ref={graph} width="60vw" height="60vh"></svg>
-    </Box>
+      <svg ref={graph} width="70vw" height="60vh"></svg>
+    </Flex>
   );
 };
 

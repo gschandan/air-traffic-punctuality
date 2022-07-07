@@ -15,3 +15,18 @@ export interface AirTraffic {
   more_than_threehundred_and_sixty_minutes_late: number;
   average_delay_minutes: number;
 }
+
+export const months: string[] = [
+  "JAN",
+  "FEB",
+  "MAR",
+  "APR",
+  "MAY",
+  "JUN",
+  "JUL",
+  "AUG",
+  "SEP",
+  "OCT",
+  "NOV",
+  "DEC",
+];
