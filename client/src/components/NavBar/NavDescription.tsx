@@ -27,7 +27,7 @@ const NavDescription: FC<NavItemProps> = (props): JSX.Element => {
         width="100%"
         height={150}
         borderRadius={5}
-        backgroundColor={themeColor === "light" ? "blue.50" : "rgba(0,0,0,0.2)"}
+        backgroundColor={themeColor === "light" ? "blue.50" : "transparent"}
       >
         <Icon
           as={props.icon}
