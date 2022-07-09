@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react";
-import { Box, Flex, Text, useColorModeValue } from "@chakra-ui/react";
+import { Flex, Text, useColorModeValue } from "@chakra-ui/react";
 import * as d3 from "d3";
 import { GraphControlsContext } from "../Graph";
 import { months } from "../../../types/airTrafficData";
