@@ -35,3 +35,4 @@ if __name__ == "__main__":
     populate_air_traffic_data(table_names=['air_traffic_all', 'air_traffic_chartered', 'air_traffic_scheduled'])
     host = settings.host_dev if settings.environment == "dev" else settings.host_prod
     uvicorn.run("main:server", host=host, port=5001, reload=settings.environment == "dev" )
+    
