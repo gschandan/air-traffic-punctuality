@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     environment: str = Field(..., env="ENVIRONMENT")
     origin_dev: str = Field(..., env="ORIGIN_DEV")
     origin_prod: str = Field(..., env="ORIGIN_PROD")
+    host_dev: str = Field(..., env="HOST_DEV")
+    host_prod: str = Field(..., env="HOST_PROD")
     class Config:
         env_prefix = ""
         case_sentive = False
@@ -31,4 +33,5 @@ server.include_router(api.api_router)
 
 if __name__ == "__main__":
     populate_air_traffic_data(table_names=['air_traffic_all', 'air_traffic_chartered', 'air_traffic_scheduled'])
-    uvicorn.run("main:server", host="127.0.0.1", port=5001, reload=True)
+    host = settings.host_dev if settings.environment == "dev" else settings.host_prod
+    uvicorn.run("main:server", host=host, port=5001, reload=settings.environment == "dev" )
