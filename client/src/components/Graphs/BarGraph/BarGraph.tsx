@@ -41,7 +41,7 @@ const BarGraph = () => {
   }, [controlContext.state]);
 
   useEffect(() => {
-    fetch(url)
+    fetch(url, Headers)
       .then((response) => response.json())
       .then((response) => setData(response))
       .then(() => {

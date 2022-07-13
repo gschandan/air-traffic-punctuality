@@ -10,8 +10,8 @@ server = FastAPI()
 
 server.add_middleware(
     CORSMiddleware,
-    allow_origins = ["https://flight-insights.gschandan.dev", "http://flight-insights.gschandan.dev"],
-    allow_credentials = True,
+    allow_origins = ["*"],
+    allow_credentials = False,
     allow_methods = ["*"],
     allow_headers = ["*"],
 )
