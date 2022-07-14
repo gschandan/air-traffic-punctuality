@@ -15,7 +15,7 @@ type CombinedAirportAverageDelay = {
 };
 
 const BarGraph = () => {
-  const baseUrl = "http://localhost:5001/api/";
+  const baseUrl = "https://flight-insights.gschandan.dev/api/";
 
   const [data, setData] =
     useState<(CombinedMonthAverageDelay | CombinedAirportAverageDelay)[]>();
@@ -41,7 +41,7 @@ const BarGraph = () => {
   }, [controlContext.state]);
 
   useEffect(() => {
-    fetch(url, Headers)
+    fetch(url)
       .then((response) => response.json())
       .then((response) => setData(response))
       .then(() => {
