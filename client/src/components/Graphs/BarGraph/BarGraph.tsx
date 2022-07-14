@@ -15,7 +15,10 @@ type CombinedAirportAverageDelay = {
 };
 
 const BarGraph = () => {
-  const baseUrl = "https://flight-insights.gschandan.dev/api/";
+  const baseUrl =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:5001/api/"
+      : "https://flight-insights.gschandan.dev/api/";
 
   const [data, setData] =
     useState<(CombinedMonthAverageDelay | CombinedAirportAverageDelay)[]>();
